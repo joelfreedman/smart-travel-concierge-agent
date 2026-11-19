@@ -1,0 +1,45 @@
+name: CI - Tests, Golden Evals & Security Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Set up Python 3.13
+        run: uv python install 3.13
+
+      - name: Install dependencies
+        run: uv sync --frozen --extra dev
+
+      - name: Run Ruff lint and security checks (Bandit rules)
+        run: uv run ruff check travel_concierge tests evals
+
+      - name: Run unit & integration test suite
+        run: uv run pytest tests/
+
+      - name: Run golden dataset evaluation regression suite
+        run: uv run pytest evals/test_golden_evals.py
+
+      - name: Validate Terraform formatting and syntax
+        uses: hashicorp/setup-terraform@v3
+      - run: |
+          cd infra/terraform
+          terraform fmt -check
+          terraform init -backend=false
+          terraform validate

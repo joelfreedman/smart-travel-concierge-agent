@@ -1,0 +1,24 @@
+rules:
+  - id: detect-hardcoded-google-api-key
+    pattern-regex: 'AIzaSy[A-Za-z0-9_\-]{10,}'
+    message: "Security Violation: Hardcoded Google API key detected. Use SecretProvider / Secret Manager."
+    languages:
+      - python
+    severity: ERROR
+
+  - id: forbid-raw-print-in-runtime
+    pattern: print(...)
+    paths:
+      include:
+        - travel_concierge/**
+    message: "Observability Violation: Use StructuredAgentLogger instead of raw print() in runtime code."
+    languages:
+      - python
+    severity: ERROR
+
+  - id: forbid-sql-fstring-execution
+    pattern: $CONN.execute(f"...")
+    message: "Security Violation (CWE-89): Parameterized SQL queries are mandatory; never interpolate f-strings into execute()."
+    languages:
+      - python
+    severity: ERROR

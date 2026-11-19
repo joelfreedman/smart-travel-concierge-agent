@@ -1,0 +1,54 @@
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "smart-travel-concierge-agent"
+version = "0.1.0"
+description = "Production-grade Smart Travel & Trip Budget Concierge Multi-Agent built with Google ADK-Python, OpenTelemetry, PII redaction, persistent memory, and Human-in-the-Loop booking confirmation."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+dependencies = [
+    "google-adk>=2.14.0,<3.0.0",
+    "google-genai>=1.0.0",
+    "pydantic>=2.7.0,<3.0.0",
+    "opentelemetry-api>=1.27.0",
+    "opentelemetry-sdk>=1.27.0",
+    "google-cloud-secret-manager>=2.20.0",
+    "google-cloud-dlp>=3.20.0",
+    "aiosqlite>=0.20.0",
+    "python-dotenv>=1.0.1",
+    "pyyaml>=6.0.1",
+    "fastapi>=0.115.0",
+    "uvicorn>=0.32.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "httpx>=0.27.0",
+    "ruff>=0.8.0",
+]
+cloud-trace = [
+    "opentelemetry-exporter-gcp-trace>=1.7.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["travel_concierge"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests", "evals"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 115
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "S"]
+ignore = ["S101"]

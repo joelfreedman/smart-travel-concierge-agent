@@ -1,0 +1,41 @@
+# Python & virtual environments
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# Secrets & local environment files (NEVER commit)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+service-account*.json
+credentials*.json
+
+# Local runtime state & SQLite databases
+data/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite3
+artifacts/
+deployment_metadata.json
+
+# Terraform local state & sensitive var files
+infra/terraform/.terraform/
+infra/terraform/*.tfstate
+infra/terraform/*.tfstate.*
+infra/terraform/*.tfvars
+!infra/terraform/terraform.tfvars.example
+infra/terraform/.terraform.lock.hcl
+
+# OS & IDE files
+.DS_Store
+.vscode/
+.idea/
